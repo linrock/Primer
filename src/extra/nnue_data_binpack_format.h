@@ -7754,8 +7754,8 @@ namespace binpack
 
         // https://github.com/official-stockfish/Stockfish/pull/3989
         static constexpr double desired_piece_count_weights[33] = {
-            1.000000,
-            1.121094, 1.234375, 1.339844, 1.437500, 1.527344, 1.609375, 1.683594, 1.750000,
+            0.000000,
+            0.000000, 0.000000, 1.339844, 1.437500, 1.527344, 1.609375, 1.683594, 1.750000,
             1.808594, 1.859375, 1.902344, 1.937500, 1.964844, 1.984375, 1.996094, 2.000000,
             1.996094, 1.984375, 1.964844, 1.937500, 1.902344, 1.859375, 1.808594, 1.750000,
             1.683594, 1.609375, 1.527344, 1.437500, 1.339844, 1.234375, 1.121094, 1.000000
@@ -7854,8 +7854,10 @@ namespace binpack
             tmp = std::min(1.0, tmp);
             std::bernoulli_distribution distrib(1.0 - tmp);
             auto& prng = rng::get_thread_local_rng();
-            if (distrib(prng))
+            if (distrib(prng)) {
+		filtered_piece_count_dist_counter++;
                 continue;
+	    }
 
             piece_count_history_passed[pc] += 1;
             piece_count_history_passed_total += 1;
@@ -7871,6 +7873,9 @@ namespace binpack
 
                 const auto cur = outputFile.tellp();
                 std::cout << "Processed " << (cur - base) << " bytes and " << numProcessedPositions << " positions.\n";
+		// for (int i = 0; i < 32; i++) {
+                //     std::cout << "  pc " << i << ": " << piece_count_history_passed[i] << std::endl;
+	        // }
             }
 
             if (settings.position_limit && numProcessedPositions >= settings.max_pos_count)
@@ -7897,6 +7902,7 @@ namespace binpack
         std::cout << "Wins filtered: " << filtered_wins_counter << " \n";
         std::cout << "Losses filtered: " << filtered_losses_counter << " \n";
         std::cout << "WDL filtered: " << filtered_wld_skip_counter << " \n";
+        std::cout << "Piece count dist filtered: " << filtered_piece_count_dist_counter << " \n";
     }
 
     inline void validateBinpack(std::string inputPath)
