@@ -7903,6 +7903,9 @@ namespace binpack
         std::cout << "Losses filtered: " << filtered_losses_counter << " \n";
         std::cout << "WDL filtered: " << filtered_wld_skip_counter << " \n";
         std::cout << "Piece count dist filtered: " << filtered_piece_count_dist_counter << " \n";
+        for (int i = 1; i < 33; i++) {
+            std::cout << "  pc " << i << ": " << piece_count_history_passed[i] << std::endl;
+        }
     }
 
     inline void validateBinpack(std::string inputPath)
