@@ -7979,7 +7979,7 @@ namespace binpack
                 continue;
             }
             // filter captures , positions where stm is in check
-            if (settings.filter_captures && e.isCapturingMove()){
+            if (settings.filter_captures && e.isCapturingMove() && e.seeGE(0)){
                 filtered_captures_counter++;
                 continue;
             }
@@ -8081,7 +8081,7 @@ namespace binpack
 
         // Print filtering recap
         std::cout << "Checks filtered: " << filtered_checks_counter << " \n";
-        std::cout << "Captures filtered: " << filtered_captures_counter << " \n";
+        std::cout << "Captures (SEE > 0) filtered: " << filtered_captures_counter << " \n";
         std::cout << "Scores filtered: " << filtered_scores_counter << " \n";
         std::cout << "Plies filtered: " << filtered_plies_counter << " \n";
         std::cout << "Wins filtered: " << filtered_wins_counter << " \n";
